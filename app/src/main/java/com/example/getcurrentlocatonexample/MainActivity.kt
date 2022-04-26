@@ -65,14 +65,14 @@ class MainActivity : AppCompatActivity() {
             .addLocationRequest(locationRequest)
         builder.setAlwaysShow(true)
 
-        val result = LocationServices.getSettingsClient(applicationContext)
+        val result = LocationServices.getSettingsClient(this)
             .checkLocationSettings(builder.build())
 
 
 
         result.addOnCompleteListener {
             try {
-                //val response = task.getResult(ApiException::class.java)
+                val response = task.getResult(ApiException::class.java)
 
 
                 Toast.makeText(this@MainActivity, "GPS is already toured on", Toast.LENGTH_SHORT)
