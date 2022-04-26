@@ -1,4 +1,4 @@
-package com.example.getcurrentlocatonexample
+package com.example.getcurrentlocatonexample.utils
 
 import android.content.Context
 import android.net.ConnectivityManager

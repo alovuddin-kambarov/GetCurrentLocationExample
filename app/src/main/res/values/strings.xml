@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">GetCurrentLocationExample</string>
     <string name="get_location">Get location</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="enter_your_name">Enter your name</string>
+    <string name="get_started">Get Started</string>
 </resources>

@@ -3,6 +3,7 @@ package com.example.getcurrentlocatonexample
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.location.LocationManager
@@ -12,10 +13,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.getcurrentlocatonexample.databinding.ActivityMainBinding
+import com.example.getcurrentlocatonexample.models.MyLocation
+import com.example.getcurrentlocatonexample.utils.NetworkHelper
 import com.github.florent37.runtimepermission.kotlin.askPermission
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
+import com.google.firebase.database.FirebaseDatabase
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var locationRequest: LocationRequest
@@ -70,7 +75,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        result.addOnCompleteListener { task->
+        result.addOnCompleteListener { task ->
             try {
                 val response = task.getResult(ApiException::class.java)
 
@@ -128,6 +133,7 @@ class MainActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
+            println()
         } else {
             return
         }
@@ -140,7 +146,7 @@ class MainActivity : AppCompatActivity() {
 
             val result = task.result
 
-            if (result != null) {
+            if (result != null && binding.name.text.isNotBlank()) {
 
                 //val mLocation = LatLng(result.latitude, result.longitude)
                 /*  mMap.addMarker(MarkerOptions().position(mLocation).title("?"))
@@ -149,10 +155,24 @@ class MainActivity : AppCompatActivity() {
                 /*       val location = Location()
 
 
-                       mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLocation, 15f))
-                       startActivity(Intent(this, MainActivity::class.java).putExtra("lll", location))*/
-                binding.textView.text =
-                    result.latitude.toString() + "\n" + result.longitude.toString()
+                       mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLocation, 15f))*/
+
+                val database = FirebaseDatabase.getInstance()
+                val myRef = database.getReference("activities/${binding.name.text}")
+
+
+                myRef.setValue(
+                    MyLocation(
+                        binding.name.text.toString(),
+                        result.latitude,
+                        result.longitude
+                    )
+                )
+
+
+                startActivity(Intent(this, MapsActivity::class.java))
+
+
             }
 
         }
